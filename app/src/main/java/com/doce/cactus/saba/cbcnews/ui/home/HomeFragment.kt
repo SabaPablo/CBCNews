@@ -1,8 +1,10 @@
 package com.doce.cactus.saba.cbcnews.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.FragmentHomeBinding
 import com.doce.cactus.saba.cbcnews.ui.detail.DetailViewModel
@@ -22,14 +24,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
+        viewModel.getNews()
+
+
+        configureObservers()
+
+
     }
 
-
-
-
-
-
-
+    private fun configureObservers() {
+        viewModel.newsLiveData.observe(viewLifecycleOwner) { news ->
+            Log.d("news", news.toString())
+        }
+    }
 
 
     override fun onDestroyView() {
