@@ -14,7 +14,12 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     private val _newsLiveData: MutableLiveData<List<News>> = MutableLiveData<List<News>>()
     val newsLiveData: LiveData<List<News>> = _newsLiveData
 
-    fun getNews(){
+    val newsFiltered: MutableLiveData<List<News>> = MutableLiveData()
+
+
+
+
+    fun getNetworkNews(){
         viewModelScope.launch {
             newsRepository.news().catch { e ->
                 e.printStackTrace()
@@ -23,6 +28,35 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
             }
 
         }
+    }
+
+    fun setFilter(checkedIds: List<Int>) {
+        val checkedTypes = checkedIdsToTypes(checkedIds)
+
+        newsFiltered.value = newsLiveData.value?.filter { checkedTypes.contains(it.type) }
+    }
+
+    private fun checkedIdsToTypes(checkedIds: List<Int>): List<String> {
+        return checkedIds.map { conversionTypeOfId(it) }
+    }
+
+    private fun conversionTypeOfId(it: Int): String {
+        return when(it){
+            1 -> "contentpackage"
+            else -> "story"
+        }
+    }
+
+    fun getNewsWith(hasConnection: Boolean) {
+        if(hasConnection){
+            getNetworkNews()
+        }else{
+            getOfflineNews()
+        }
+    }
+
+    private fun getOfflineNews() {
+        TODO("Not yet implemented")
     }
 
 

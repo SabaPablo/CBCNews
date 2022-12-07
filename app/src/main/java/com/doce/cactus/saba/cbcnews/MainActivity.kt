@@ -18,15 +18,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    var hasConnection = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        isOnline()
+        startListenerNetwork()
     }
 
-    fun isOnline() {
+    private fun startListenerNetwork() {
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
@@ -39,19 +41,17 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Connection","available")
                 Handler(Looper.getMainLooper()).post {
                     binding.wifiStatusIv.visibility = View.GONE
+                    hasConnection = true
                 }
-
             }
-
-
 
             // lost network connection
             override fun onLost(network: Network) {
                 super.onLost(network)
                 Log.d("Connection","Lost")
-
                 Handler(Looper.getMainLooper()).post {
                     binding.wifiStatusIv.visibility = View.VISIBLE
+                    hasConnection = false
                 }
             }
         }

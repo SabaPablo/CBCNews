@@ -8,7 +8,7 @@ import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.NewsItemBinding
 import com.doce.cactus.saba.cbcnews.models.News
 
-class NewsAdapter(private val dataSet: List<News>): RecyclerView.Adapter<NewsAdapter.ViewHolder>(){
+class NewsAdapter(private var dataSet: List<News>): RecyclerView.Adapter<NewsAdapter.ViewHolder>(){
     class ViewHolder private constructor(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: News) {
@@ -42,7 +42,14 @@ class NewsAdapter(private val dataSet: List<News>): RecyclerView.Adapter<NewsAda
         holder.bind(item)
 
     }
-
+    fun filterList(filterlist: List<News>) {
+        // below line is to add our filtered
+        // list in our course array list.
+        dataSet = filterlist
+        // below line is to notify our adapter
+        // as change in recycler view data.
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int {
         return dataSet.size
