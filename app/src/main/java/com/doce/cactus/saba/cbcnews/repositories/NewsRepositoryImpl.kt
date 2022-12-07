@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 class NewsRepositoryImpl(private val api: NewsApi): NewsRepository {
     override fun news(): Flow<List<News>> {
         return flow {
-            emit(api.news())
+            emit(api.news("news"))
         }.flowOn(Dispatchers.IO)
     }
 }
