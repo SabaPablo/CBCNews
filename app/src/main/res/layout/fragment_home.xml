@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
 
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/flexboxLayout"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/filter_cg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="clip_horizontal"
@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:checked="true"
                 android:text="Content package" />
 
             <com.google.android.material.chip.Chip
@@ -33,15 +34,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-
+                android:checked="true"
                 android:text="Story" />
-    </com.google.android.flexbox.FlexboxLayout>
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/news_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flexboxLayout"
+        app:layout_constraintTop_toBottomOf="@+id/filter_cg"
         tools:layout_editor_absoluteX="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

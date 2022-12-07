@@ -41,7 +41,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
-                        android:text="CBC"
+                        android:text="CBC News"
                         android:textSize="30sp" />
 
                 </LinearLayout>
