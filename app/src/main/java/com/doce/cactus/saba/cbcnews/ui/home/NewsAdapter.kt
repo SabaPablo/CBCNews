@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.NewsItemBinding
 import com.doce.cactus.saba.cbcnews.models.News
 
@@ -11,11 +12,13 @@ class NewsAdapter(private val dataSet: List<News>): RecyclerView.Adapter<NewsAda
     class ViewHolder private constructor(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: News) {
+
             Glide.with(binding.root)
                 .load(item.images.square140)
+                .error(binding.imageNewsIv.context.getDrawable(R.drawable.no_image))
+
                 .into(binding.imageNewsIv)
             binding.titleTv.text = item.title
-
 
         }
 
