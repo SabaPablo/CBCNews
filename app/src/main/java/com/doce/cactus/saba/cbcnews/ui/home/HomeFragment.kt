@@ -1,13 +1,11 @@
 package com.doce.cactus.saba.cbcnews.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.FragmentHomeBinding
-import com.doce.cactus.saba.cbcnews.ui.detail.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -25,16 +23,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         _binding = FragmentHomeBinding.bind(view)
 
         viewModel.getNews()
-
-
         configureObservers()
-
 
     }
 
     private fun configureObservers() {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { news ->
-            Log.d("news", news.toString())
+            val adapter = NewsAdapter(news)
+            binding.newsRv.adapter = adapter
+            binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
