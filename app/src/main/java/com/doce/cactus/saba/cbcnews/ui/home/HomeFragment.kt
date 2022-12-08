@@ -43,7 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.newsRv.adapter = adapter
             binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
         }
-        binding.filterCg.setOnCheckedStateChangeListener { group, checkedIds ->
+        binding.filterCg.setOnCheckedStateChangeListener { _, checkedIds ->
             viewModel.setFilter(checkedIds)
             Log.d("chip", checkedIds.toString())
         }
