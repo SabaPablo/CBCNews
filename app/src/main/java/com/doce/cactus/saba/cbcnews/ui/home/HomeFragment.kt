@@ -1,20 +1,14 @@
 package com.doce.cactus.saba.cbcnews.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.doce.cactus.saba.cbcnews.MainActivity
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.FragmentHomeBinding
-import com.doce.cactus.saba.cbcnews.models.News
 import com.google.android.material.chip.Chip
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -32,30 +26,25 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.shimmerViewContainer.startShimmer()
         viewModel.getNetworkNews()
-
         pullToRefresh()
-
         configureObservers()
     }
 
     private fun pullToRefresh() {
+
         binding.swipeRl.setOnRefreshListener {
             viewModel.getNetworkNews()
-
         }
-
-
-
     }
-
 
     private fun configureObservers() {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { news ->
@@ -65,6 +54,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
             adapter?.submitList(news)
             viewModel.setChips(news)
+            binding.shimmerViewContainer.stopShimmer()
+            binding.shimmerViewContainer.visibility = View.GONE
         }
         binding.filterCg.setOnCheckedStateChangeListener { _, checkedIds ->
             viewModel.setFilter(checkedIds)
@@ -88,8 +79,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.filterCg
         }
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
