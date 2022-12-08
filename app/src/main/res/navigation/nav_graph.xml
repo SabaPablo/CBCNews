@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.doce.cactus.saba.cbcnews.ui.detail.SplashFragment"
+        android:name="com.doce.cactus.saba.cbcnews.ui.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action

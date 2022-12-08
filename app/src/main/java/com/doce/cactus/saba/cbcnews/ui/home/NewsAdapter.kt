@@ -9,6 +9,9 @@ import com.bumptech.glide.Glide
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.NewsItemBinding
 import com.doce.cactus.saba.cbcnews.models.News
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
     class ViewHolder private constructor(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root){
@@ -21,7 +24,18 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
 
                 .into(binding.imageNewsIv)
             binding.titleTv.text = item.title
+            binding.publishedTv.text = "Posted: ${getDateTime(item.publishedAt)}"
 
+        }
+
+        private fun getDateTime(timeStamp: Long): String? {
+            try {
+                val sdf = SimpleDateFormat("MMM dd, yyyy HH:MM", Locale.getDefault())
+                val netDate = Date(timeStamp)
+                return sdf.format(netDate)
+            } catch (e: Exception) {
+                return e.toString()
+            }
         }
 
         companion object {

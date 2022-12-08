@@ -1,6 +1,5 @@
-package com.doce.cactus.saba.cbcnews.ui.detail
+package com.doce.cactus.saba.cbcnews.ui.splash
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
