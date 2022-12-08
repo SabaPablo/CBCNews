@@ -10,7 +10,6 @@ import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.NewsItemBinding
 import com.doce.cactus.saba.cbcnews.models.News
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
@@ -24,7 +23,7 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
 
                 .into(binding.imageNewsIv)
             binding.titleTv.text = item.title
-            binding.publishedTv.text = "Posted: ${getDateTime(item.publishedAt)}"
+            binding.publishedTv.text = "Posted: ${getDateTime(item.updatedAt)}"
 
         }
 
@@ -54,9 +53,7 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
-
     }
-
 
     class MyDiffCallback : DiffUtil.ItemCallback<News>() {
         override fun areItemsTheSame(firstItem: News, secondItem: News) =
@@ -66,4 +63,3 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
             firstItem == secondItem
     }
 }
-
