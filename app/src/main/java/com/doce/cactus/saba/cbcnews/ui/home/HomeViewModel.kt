@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.doce.cactus.saba.cbcnews.models.News
 import com.doce.cactus.saba.cbcnews.repositories.NewsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
@@ -23,10 +25,18 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
         viewModelScope.launch {
             newsRepository.news().catch { e ->
                 e.printStackTrace()
+                getOfflineNews()
             }.collect {
                 _newsLiveData.value = it
+                saveNewsInCache(it)
             }
 
+        }
+    }
+
+    private fun saveNewsInCache(it: List<News>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            newsRepository.saveNews(it)
         }
     }
 
@@ -56,7 +66,13 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     }
 
     private fun getOfflineNews() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            newsRepository.newsOffline().catch { e ->
+                e.printStackTrace()
+            }.collect {
+                _newsLiveData.value = it
+            }
+        }
     }
 
 
