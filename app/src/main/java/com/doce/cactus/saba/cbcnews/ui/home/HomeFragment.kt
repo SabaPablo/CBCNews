@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.doce.cactus.saba.cbcnews.MainActivity
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.FragmentHomeBinding
+import com.doce.cactus.saba.cbcnews.models.News
+import com.google.android.material.chip.Chip
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -62,6 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.newsRv.adapter = adapter
             binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
             adapter?.submitList(news)
+            viewModel.setChips(news)
         }
         binding.filterCg.setOnCheckedStateChangeListener { _, checkedIds ->
             viewModel.setFilter(checkedIds)
@@ -70,7 +73,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             adapter?.submitList(it)
 
         }
+
+        viewModel.types.observe(viewLifecycleOwner){types ->
+            binding.filterCg.removeAllViews()
+            types.forEachIndexed { index, s ->
+                val chip = Chip(requireContext())
+                chip.id = index
+                chip.text = s
+                chip.isCheckable = true
+                chip.isChecked = true
+                binding.filterCg.addView(chip)
+
+            }
+            binding.filterCg
+        }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

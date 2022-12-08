@@ -29,12 +29,12 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
         }
 
         private fun getDateTime(timeStamp: Long): String? {
-            try {
+            return try {
                 val sdf = SimpleDateFormat("MMM dd, yyyy HH:MM", Locale.getDefault())
                 val netDate = Date(timeStamp)
-                return sdf.format(netDate)
+                sdf.format(netDate)
             } catch (e: Exception) {
-                return e.toString()
+                e.toString()
             }
         }
 
