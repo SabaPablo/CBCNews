@@ -7,7 +7,6 @@ import com.doce.cactus.saba.cbcnews.apis.NewsApi
 import com.doce.cactus.saba.cbcnews.dao.NewsDao
 import com.doce.cactus.saba.cbcnews.repositories.NewsRepository
 import com.doce.cactus.saba.cbcnews.repositories.NewsRepositoryImpl
-import com.doce.cactus.saba.cbcnews.ui.detail.DetailViewModel
 import com.doce.cactus.saba.cbcnews.ui.home.HomeViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
@@ -15,11 +14,9 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 val viewModelModule = module {
     viewModel { HomeViewModel( get() ) }
-    viewModel { DetailViewModel() }
 }
 
 val repositoriesModule = module {

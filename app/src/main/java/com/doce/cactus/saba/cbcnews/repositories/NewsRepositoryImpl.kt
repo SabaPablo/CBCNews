@@ -1,6 +1,5 @@
 package com.doce.cactus.saba.cbcnews.repositories
 
-import androidx.lifecycle.LiveData
 import com.doce.cactus.saba.cbcnews.apis.NewsApi
 import com.doce.cactus.saba.cbcnews.dao.NewsDao
 import com.doce.cactus.saba.cbcnews.models.News
@@ -24,6 +23,10 @@ class NewsRepositoryImpl(private val api: NewsApi, private  var dao: NewsDao,): 
 
     override suspend fun saveNews(it: List<News>) {
         dao.insertAll(*it.toTypedArray())
+    }
+
+    override fun deleteAll() {
+        dao.deleteAll()
     }
 
 }
