@@ -2,13 +2,15 @@ package com.doce.cactus.saba.cbcnews.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.NewsItemBinding
 import com.doce.cactus.saba.cbcnews.models.News
 
-class NewsAdapter(private var dataSet: List<News>): RecyclerView.Adapter<NewsAdapter.ViewHolder>(){
+class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
     class ViewHolder private constructor(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: News) {
@@ -35,23 +37,19 @@ class NewsAdapter(private var dataSet: List<News>): RecyclerView.Adapter<NewsAda
         return ViewHolder.from(parent)
     }
 
-
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dataSet[position]
+        val item = getItem(position)
         holder.bind(item)
 
     }
-    fun filterList(filterlist: List<News>) {
-        // below line is to add our filtered
-        // list in our course array list.
-        dataSet = filterlist
-        // below line is to notify our adapter
-        // as change in recycler view data.
-        notifyDataSetChanged()
-    }
 
-    override fun getItemCount(): Int {
-        return dataSet.size
+
+    class MyDiffCallback : DiffUtil.ItemCallback<News>() {
+        override fun areItemsTheSame(firstItem: News, secondItem: News) =
+            firstItem.id == secondItem.id
+
+        override fun areContentsTheSame(firstItem: News, secondItem: News) =
+            firstItem == secondItem
     }
 }
+
