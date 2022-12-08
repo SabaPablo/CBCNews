@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.FragmentHomeBinding
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -37,6 +41,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.getNetworkNews()
         pullToRefresh()
         configureObservers()
+        observeEvents()
     }
 
     private fun pullToRefresh() {
@@ -77,6 +82,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             }
             binding.filterCg
+        }
+    }
+
+    private fun observeEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect { events ->
+                    when (events) {
+                        HomeEvents.ErrorNews -> {
+                            Toast.makeText(requireContext(),"Error connection",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
     }
 

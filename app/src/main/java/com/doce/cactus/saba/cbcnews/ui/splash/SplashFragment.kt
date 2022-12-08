@@ -12,7 +12,6 @@ import com.doce.cactus.saba.cbcnews.databinding.FragmentSplashBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     private var _binding: FragmentSplashBinding? = null
@@ -38,7 +37,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                 R.id.action_splashFragment_to_homeFragment
             )
         }
-
     }
 
     override fun onDestroyView() {

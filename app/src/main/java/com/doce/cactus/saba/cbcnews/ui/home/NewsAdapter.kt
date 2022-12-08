@@ -23,7 +23,7 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
 
                 .into(binding.imageNewsIv)
             binding.titleTv.text = item.title
-            binding.publishedTv.text = "Posted: ${getDateTime(item.updatedAt)}"
+            binding.publishedTv.text = "Posted: ${getDateTime(item.publishedAt)}"
 
         }
 

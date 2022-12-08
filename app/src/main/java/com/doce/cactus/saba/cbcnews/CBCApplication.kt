@@ -33,9 +33,6 @@ class CBCApplication: Application() {
                 viewModelModule, networkModule, repositoriesModule, databaseModule
             ))
         }
-
-
-
     }
 
 }
