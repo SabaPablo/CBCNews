@@ -17,6 +17,8 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     private val _newsLiveData: MutableLiveData<List<News>> = MutableLiveData<List<News>>()
     val newsLiveData: LiveData<List<News>> = _newsLiveData
     val newsFiltered: MutableLiveData<List<News>> = MutableLiveData()
+    val types:  MutableLiveData<List<String>> = MutableLiveData()
+
 
     fun getNetworkNews(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,10 +51,8 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     }
 
     private fun conversionTypeOfId(it: Int): String {
-        return when(it){
-            3 -> "contentpackage"
-            else -> "story"
-        }
+        return types.value!![it]
+
     }
 
 
@@ -64,6 +64,11 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
             }.collect { it ->
                 _newsLiveData.postValue(it.sortedBy { news -> news.publishedAt })
             }
+
+    }
+
+    fun setChips(news: List<News>?) {
+        types.value = news?.map { it.type }?.distinct()
 
     }
 }
