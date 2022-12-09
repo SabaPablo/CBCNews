@@ -11,8 +11,6 @@ data class News(
     @PrimaryKey
     @SerializedName("id")
     val id: Int = 0,
-    @SerializedName("images")
-    @Embedded val images: Images = Images(),
     @SerializedName("language")
     val language: String = "",
     @SerializedName("publishedAt")
@@ -28,5 +26,7 @@ data class News(
     @SerializedName("updatedAt")
     val updatedAt: Long = 0,
     @SerializedName("version")
-    val version: String = ""
+    val version: String = "",
+    @SerializedName("images")
+    @Embedded val images: Images = Images()
 )

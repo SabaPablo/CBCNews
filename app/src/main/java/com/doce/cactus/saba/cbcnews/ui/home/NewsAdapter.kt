@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
-    class ViewHolder private constructor(private val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root){
+    class ViewHolder private constructor( val binding: NewsItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: News) {
 

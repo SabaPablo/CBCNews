@@ -30,10 +30,10 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
                 // Loading
             }.catch { e ->
                 e.printStackTrace()
-                getOfflineNews()
                 eventsChannel.send(HomeEvents.ErrorNews)
 
             }.collect {
+                setChips(it)
                 _newsLiveData.postValue(it.sortedByDescending { news ->  news.updatedAt })
                 saveNewsInCache(it)
             }
@@ -60,22 +60,25 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
         return types.value!![it]
     }
 
-    private suspend fun getOfflineNews() {
+    fun getOfflineNews() {
+        viewModelScope.launch(Dispatchers.IO) {
             newsRepository.newsOffline().catch { e ->
                 e.printStackTrace()
                 eventsChannel.send(HomeEvents.ErrorDBNews)
 
             }.collect { listNews ->
-                if(listNews.isEmpty()){
+                if (listNews.isEmpty()) {
                     eventsChannel.send(HomeEvents.ErrorDBNews)
-                }else{
+                } else {
+                    setChips(listNews)
                     _newsLiveData.postValue(listNews.sortedByDescending { news -> news.updatedAt })
                 }
             }
+        }
     }
 
-    fun setChips(news: List<News>?) {
-        types.value = news?.map { it.type }?.distinct()
+    private fun setChips(news: List<News>?) {
+        types.postValue(news?.map { it.type }?.distinct())
 
     }
 }
