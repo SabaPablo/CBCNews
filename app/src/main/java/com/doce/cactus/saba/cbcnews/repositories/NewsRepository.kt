@@ -5,4 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
     fun news(): Flow<List<News>>
+    fun newsOffline(): Flow<List<News>>
+    suspend fun saveNews(it: List<News>)
+    fun deleteAll()
 }

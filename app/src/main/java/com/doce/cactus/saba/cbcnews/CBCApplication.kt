@@ -2,6 +2,7 @@ package com.doce.cactus.saba.cbcnews
 
 import android.app.Application
 import android.content.Context
+import com.doce.cactus.saba.cbcnews.koin.databaseModule
 import com.doce.cactus.saba.cbcnews.koin.networkModule
 import com.doce.cactus.saba.cbcnews.koin.repositoriesModule
 import com.doce.cactus.saba.cbcnews.koin.viewModelModule
@@ -29,12 +30,9 @@ class CBCApplication: Application() {
             androidLogger()
             androidContext(this@CBCApplication)
             modules(listOf(
-                viewModelModule, networkModule, repositoriesModule
+                viewModelModule, networkModule, repositoriesModule, databaseModule
             ))
         }
-
-
-
     }
 
 }
