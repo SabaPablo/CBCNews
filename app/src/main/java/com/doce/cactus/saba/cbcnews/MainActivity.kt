@@ -11,11 +11,16 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.doce.cactus.saba.cbcnews.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    var isConnected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +41,17 @@ class MainActivity : AppCompatActivity() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 Log.d("Connection","available")
-                Handler(Looper.getMainLooper()).post {
+                lifecycleScope.launch(Dispatchers.Main) {
                     binding.wifiStatusIv.visibility = View.GONE
+
                 }
+                isConnected = true
             }
             // lost network connection
             override fun onLost(network: Network) {
                 super.onLost(network)
                 Log.d("Connection","Lost")
+                isConnected = false
                 Handler(Looper.getMainLooper()).post {
                     binding.wifiStatusIv.visibility = View.VISIBLE
                 }

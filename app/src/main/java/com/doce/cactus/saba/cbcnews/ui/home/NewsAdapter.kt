@@ -2,6 +2,7 @@ package com.doce.cactus.saba.cbcnews.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,23 +20,14 @@ class NewsAdapter: ListAdapter<News, NewsAdapter.ViewHolder>(MyDiffCallback()){
 
             Glide.with(binding.root)
                 .load(item.images.square140)
-                .error(binding.imageNewsIv.context.getDrawable(R.drawable.no_image))
+                .error(AppCompatResources.getDrawable(binding.imageNewsIv.context, R.drawable.no_image))
 
                 .into(binding.imageNewsIv)
             binding.titleTv.text = item.title
-            binding.publishedTv.text = "Posted: ${getDateTime(item.publishedAt)}"
+            binding.publishedTv.text = "Posted: ${item.readablePublishedAt}"
 
         }
 
-        private fun getDateTime(timeStamp: Long): String? {
-            return try {
-                val sdf = SimpleDateFormat("MMM dd, yyyy HH:MM", Locale.getDefault())
-                val netDate = Date(timeStamp)
-                sdf.format(netDate)
-            } catch (e: Exception) {
-                e.toString()
-            }
-        }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {

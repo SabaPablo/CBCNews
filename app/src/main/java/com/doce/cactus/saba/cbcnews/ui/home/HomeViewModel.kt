@@ -21,7 +21,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     val newsFiltered: MutableLiveData<List<News>> = MutableLiveData()
     val types:  MutableLiveData<List<String>> = MutableLiveData()
 
-    val eventsChannel = Channel<HomeEvents>(Channel.UNLIMITED)
+    private val eventsChannel = Channel<HomeEvents>(Channel.UNLIMITED)
     val events = eventsChannel.receiveAsFlow()
 
     fun getNetworkNews(){
@@ -34,7 +34,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
                 eventsChannel.send(HomeEvents.ErrorNews)
 
             }.collect {
-                _newsLiveData.postValue(it.sortedBy { news ->  news.updatedAt })
+                _newsLiveData.postValue(it.sortedByDescending { news ->  news.updatedAt })
                 saveNewsInCache(it)
             }
         }
@@ -49,7 +49,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
 
     fun setFilter(checkedIds: List<Int>) {
         val checkedTypes = checkedIdsToTypes(checkedIds)
-        newsFiltered.value = newsLiveData.value?.filter { checkedTypes.contains(it.type) }?.sortedBy { news -> news.updatedAt }
+        newsFiltered.value = newsLiveData.value?.filter { checkedTypes.contains(it.type) }?.sortedByDescending { news -> news.updatedAt }
     }
 
     private fun checkedIdsToTypes(checkedIds: List<Int>): List<String> {
@@ -63,8 +63,14 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     private suspend fun getOfflineNews() {
             newsRepository.newsOffline().catch { e ->
                 e.printStackTrace()
+                eventsChannel.send(HomeEvents.ErrorDBNews)
+
             }.collect { listNews ->
-                _newsLiveData.postValue(listNews.sortedBy { news -> news.updatedAt })
+                if(listNews.isEmpty()){
+                    eventsChannel.send(HomeEvents.ErrorDBNews)
+                }else{
+                    _newsLiveData.postValue(listNews.sortedByDescending { news -> news.updatedAt })
+                }
             }
     }
 
@@ -76,4 +82,5 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
 
 sealed class HomeEvents {
     object ErrorNews : HomeEvents()
+    object ErrorDBNews : HomeEvents()
 }

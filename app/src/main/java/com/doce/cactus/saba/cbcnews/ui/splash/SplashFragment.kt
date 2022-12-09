@@ -33,9 +33,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             delay(4000)
-            findNavController().navigate(
-                R.id.action_splashFragment_to_homeFragment
-            )
+
         }
     }
 

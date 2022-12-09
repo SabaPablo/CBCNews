@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.doce.cactus.saba.cbcnews.MainActivity
 import com.doce.cactus.saba.cbcnews.R
 import com.doce.cactus.saba.cbcnews.databinding.FragmentHomeBinding
 import com.google.android.material.chip.Chip
@@ -53,20 +54,22 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun configureObservers() {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { news ->
-            binding.swipeRl.isRefreshing = false
             adapter = NewsAdapter()
             binding.newsRv.adapter = adapter
             binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
             adapter?.submitList(news)
             viewModel.setChips(news)
-            binding.shimmerViewContainer.stopShimmer()
-            binding.shimmerViewContainer.visibility = View.GONE
+            binding.filterTv.visibility= View.VISIBLE
+            hideShimmer()
+            binding.swipeRl.isRefreshing = false
+            dataScenario()
         }
         binding.filterCg.setOnCheckedStateChangeListener { _, checkedIds ->
             viewModel.setFilter(checkedIds)
         }
         viewModel.newsFiltered.observe(viewLifecycleOwner){
             adapter?.submitList(it)
+            dataScenario()
 
         }
 
@@ -91,12 +94,35 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.events.collect { events ->
                     when (events) {
                         HomeEvents.ErrorNews -> {
+                            if((requireActivity() as MainActivity).isConnected)
+                                Toast.makeText(requireContext(),"Error bad connection",Toast.LENGTH_SHORT).show()
+                            else
+                                Toast.makeText(requireContext(),"Error no connection",Toast.LENGTH_SHORT).show()
+                        }
+                        HomeEvents.ErrorDBNews -> {
+                            noDataScenario()
+                            hideShimmer()
+                            binding.swipeRl.isRefreshing = false
                             Toast.makeText(requireContext(),"Error connection",Toast.LENGTH_SHORT).show()
+
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun hideShimmer() {
+        binding.shimmerViewContainer.stopShimmer()
+        binding.shimmerViewContainer.visibility = View.GONE
+    }
+
+    private fun noDataScenario() {
+        binding.noDataTv.visibility = View.VISIBLE
+    }
+
+    private fun dataScenario(){
+        binding.noDataTv.visibility = View.GONE
     }
 
     override fun onDestroyView() {

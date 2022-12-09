@@ -35,13 +35,14 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginEnd="4dp"
-                        android:src="@drawable/logo" />
+                        android:src="@drawable/logo"
+                        android:contentDescription="@string/logo_cbc" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
-                        android:text="CBC News"
+                        android:text="@string/cbc_news"
                         android:textSize="30sp" />
 
                 </LinearLayout>
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
                     android:src="@drawable/ic_baseline_wifi_off_24"
+                    android:contentDescription="@string/non_internet_image"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
