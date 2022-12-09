@@ -58,7 +58,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.newsRv.adapter = adapter
             binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
             adapter?.submitList(news)
-            viewModel.setChips(news)
+
             binding.filterTv.visibility= View.VISIBLE
             hideShimmer()
             binding.swipeRl.isRefreshing = false
@@ -94,6 +94,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 viewModel.events.collect { events ->
                     when (events) {
                         HomeEvents.ErrorNews -> {
+                            viewModel.getOfflineNews()
+
                             if((requireActivity() as MainActivity).isConnected)
                                 Toast.makeText(requireContext(),"Error bad connection",Toast.LENGTH_SHORT).show()
                             else
