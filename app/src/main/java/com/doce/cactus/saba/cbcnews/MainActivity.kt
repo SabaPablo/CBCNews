@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build()
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            // network is available for use
+            // Network is available for use
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 Log.d("Connection","available")
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 isConnected = true
             }
-            // lost network connection
+            // Lost network connection
             override fun onLost(network: Network) {
                 super.onLost(network)
                 Log.d("Connection","Lost")

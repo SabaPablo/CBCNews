@@ -16,7 +16,7 @@ This is a native application developed in Kotlin, that shows to its users the he
 - App logo.
 - Dynamic filters.
 - Shimmer.
-- Test.
+- Unit testing.
 
 
 ## Decisions made 

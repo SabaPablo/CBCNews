@@ -23,7 +23,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
 
     private val viewModel by viewModel<HomeViewModel>()
-    var adapter: NewsAdapter? = null
+    private var adapter: NewsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,33 +40,37 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding.shimmerViewContainer.startShimmer()
         viewModel.getNetworkNews()
-        pullToRefresh()
+        setUpAdapter()
+        configureListeners()
         configureObservers()
         observeEvents()
     }
 
-    private fun pullToRefresh() {
+    private fun setUpAdapter() {
+        adapter = NewsAdapter()
+        binding.newsRv.adapter = adapter
+        binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
+    }
 
+    private fun configureListeners() {
+
+        // Pull To Refresh
         binding.swipeRl.setOnRefreshListener {
             viewModel.getNetworkNews()
+        }
+        // Chip listener
+        binding.filterCg.setOnCheckedStateChangeListener { _, checkedIds ->
+            viewModel.setFilter(checkedIds)
         }
     }
 
     private fun configureObservers() {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { news ->
-            adapter = NewsAdapter()
-            binding.newsRv.adapter = adapter
-            binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
+            firstConfigurationAdapterAndRecyclerView()
             adapter?.submitList(news)
+            setConfigurationToShowNews()
+        }
 
-            binding.filterTv.visibility= View.VISIBLE
-            hideShimmer()
-            binding.swipeRl.isRefreshing = false
-            dataScenario()
-        }
-        binding.filterCg.setOnCheckedStateChangeListener { _, checkedIds ->
-            viewModel.setFilter(checkedIds)
-        }
         viewModel.newsFiltered.observe(viewLifecycleOwner){
             adapter?.submitList(it)
             dataScenario()
@@ -75,16 +79,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         viewModel.types.observe(viewLifecycleOwner){types ->
             binding.filterCg.removeAllViews()
-            types.forEachIndexed { index, s ->
-                val chip = Chip(requireContext())
-                chip.id = index
-                chip.text = s
-                chip.isCheckable = true
-                chip.isChecked = true
-                binding.filterCg.addView(chip)
-
+            types.forEachIndexed { index, nameChip ->
+                binding.filterCg.addView(newChip(index, nameChip))
             }
-            binding.filterCg
         }
     }
 
@@ -93,25 +90,48 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.events.collect { events ->
                     when (events) {
-                        HomeEvents.ErrorNews -> {
-                            viewModel.getOfflineNews()
-
-                            if((requireActivity() as MainActivity).isConnected)
-                                Toast.makeText(requireContext(),"Error bad connection",Toast.LENGTH_SHORT).show()
-                            else
-                                Toast.makeText(requireContext(),"Error no connection",Toast.LENGTH_SHORT).show()
-                        }
+                        HomeEvents.ErrorNews -> showErrorGetNewsAndTryToGetCacheNews()
                         HomeEvents.ErrorDBNews -> {
                             noDataScenario()
-                            hideShimmer()
-                            binding.swipeRl.isRefreshing = false
-                            Toast.makeText(requireContext(),"Error connection",Toast.LENGTH_SHORT).show()
-
+                            Toast.makeText(requireContext(),getString(R.string.unknown_error),Toast.LENGTH_SHORT).show()
                         }
+                        HomeEvents.EmptyDBNews -> noDataScenario()
                     }
                 }
             }
         }
+    }
+
+    private fun showErrorGetNewsAndTryToGetCacheNews() {
+        viewModel.getCacheNews()
+        if((requireActivity() as MainActivity).isConnected)
+            Toast.makeText(requireContext(),getString(R.string.error_msj_service),Toast.LENGTH_LONG).show()
+        else
+            Toast.makeText(requireContext(),getString(R.string.error_msj_internet),Toast.LENGTH_LONG).show()
+    }
+
+    private fun newChip(index: Int, nameChip: String): View {
+        val chip = Chip(requireContext())
+        with(chip) {
+            id = index
+            text = nameChip
+            isCheckable = true
+            isChecked = false
+        }
+        return chip
+    }
+
+    private fun setConfigurationToShowNews() {
+        binding.filterTv.visibility= View.VISIBLE
+        hideShimmer()
+        binding.swipeRl.isRefreshing = false
+        dataScenario()
+    }
+
+    private fun firstConfigurationAdapterAndRecyclerView() {
+        adapter = NewsAdapter()
+        binding.newsRv.adapter = adapter
+        binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun hideShimmer() {
@@ -120,11 +140,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun noDataScenario() {
-        binding.noDataTv.visibility = View.VISIBLE
+        hideShimmer()
+        binding.swipeRl.isRefreshing = false
+        binding.noDataLl.visibility = View.VISIBLE
     }
 
     private fun dataScenario(){
-        binding.noDataTv.visibility = View.GONE
+        hideShimmer()
+        binding.swipeRl.isRefreshing = false
+        binding.noDataLl.visibility = View.GONE
     }
 
     override fun onDestroyView() {

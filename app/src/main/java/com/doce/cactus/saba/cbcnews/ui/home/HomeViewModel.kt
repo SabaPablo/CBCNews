@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.doce.cactus.saba.cbcnews.models.News
 import com.doce.cactus.saba.cbcnews.repositories.NewsRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
@@ -48,10 +47,14 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
     }
 
     fun setFilter(checkedIds: List<Int>) {
-        val checkedTypes = checkedIdsToTypes(checkedIds)
-        newsFiltered.value = newsLiveData.value?.filter { checkedTypes.contains(it.type) }?.sortedByDescending { news -> news.updatedAt }
+        if (checkedIds.isEmpty())
+            newsFiltered.value = newsLiveData.value
+        else {
+            val checkedTypes = checkedIdsToTypes(checkedIds)
+            newsFiltered.value = newsLiveData.value?.filter { checkedTypes.contains(it.type) }
+                ?.sortedByDescending { news -> news.updatedAt }
+        }
     }
-
     private fun checkedIdsToTypes(checkedIds: List<Int>): List<String> {
         return checkedIds.map { conversionTypeOfId(it) }
     }
@@ -60,7 +63,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
         return types.value!![it]
     }
 
-    fun getOfflineNews() {
+    fun getCacheNews() {
         viewModelScope.launch(Dispatchers.IO) {
             newsRepository.newsOffline().catch { e ->
                 e.printStackTrace()
@@ -68,7 +71,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
 
             }.collect { listNews ->
                 if (listNews.isEmpty()) {
-                    eventsChannel.send(HomeEvents.ErrorDBNews)
+                    eventsChannel.send(HomeEvents.EmptyDBNews)
                 } else {
                     setChips(listNews)
                     _newsLiveData.postValue(listNews.sortedByDescending { news -> news.updatedAt })
@@ -79,11 +82,12 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
 
     private fun setChips(news: List<News>?) {
         types.postValue(news?.map { it.type }?.distinct())
-
     }
 }
 
 sealed class HomeEvents {
     object ErrorNews : HomeEvents()
     object ErrorDBNews : HomeEvents()
+    object EmptyDBNews : HomeEvents()
+
 }
