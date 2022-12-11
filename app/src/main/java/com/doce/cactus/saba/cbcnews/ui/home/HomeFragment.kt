@@ -66,7 +66,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun configureObservers() {
         viewModel.newsLiveData.observe(viewLifecycleOwner) { news ->
-            firstConfigurationAdapterAndRecyclerView()
             adapter?.submitList(news)
             setConfigurationToShowNews()
         }
@@ -126,12 +125,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         hideShimmer()
         binding.swipeRl.isRefreshing = false
         dataScenario()
-    }
-
-    private fun firstConfigurationAdapterAndRecyclerView() {
-        adapter = NewsAdapter()
-        binding.newsRv.adapter = adapter
-        binding.newsRv.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun hideShimmer() {

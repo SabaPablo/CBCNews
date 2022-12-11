@@ -71,7 +71,7 @@ class HomeViewModelTest{
                 viewModel.getCacheNews()
                 val value = viewModel.newsLiveData.getOrAwaitValue()
                 assertThat(value.size, Matchers.`is`(10))
-                assertThat(value[0].id, Matchers.`is`(3863948))
+                assertThat(value[0].id, Matchers.`is`(1414200))
 
             }
         }

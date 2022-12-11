@@ -31,10 +31,10 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
                 e.printStackTrace()
                 eventsChannel.send(HomeEvents.ErrorNews)
 
-            }.collect {
-                setChips(it)
-                _newsLiveData.postValue(it.sortedByDescending { news ->  news.updatedAt })
-                saveNewsInCache(it)
+            }.collect { newsList->
+                setChips(newsList)
+                _newsLiveData.postValue(newsList.sortedByDescending { news -> news.publishedAt })
+                saveNewsInCache(newsList)
             }
         }
     }
@@ -52,7 +52,6 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
         else {
             val checkedTypes = checkedIdsToTypes(checkedIds)
             newsFiltered.value = newsLiveData.value?.filter { checkedTypes.contains(it.type) }
-                ?.sortedByDescending { news -> news.updatedAt }
         }
     }
     private fun checkedIdsToTypes(checkedIds: List<Int>): List<String> {
@@ -74,7 +73,7 @@ class HomeViewModel(private val newsRepository: NewsRepository) : ViewModel(){
                     eventsChannel.send(HomeEvents.EmptyDBNews)
                 } else {
                     setChips(listNews)
-                    _newsLiveData.postValue(listNews.sortedByDescending { news -> news.updatedAt })
+                    _newsLiveData.postValue(listNews)
                 }
             }
         }
