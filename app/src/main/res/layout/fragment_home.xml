@@ -7,19 +7,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment">
-
-    <ImageView
-        android:id="@+id/no_data_tv"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/ic_baseline_wifi_off_24"
+    <LinearLayout
+        android:id="@+id/no_data_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:orientation="vertical"
         android:visibility="gone"
         android:contentDescription="@string/non_internet_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/grey_transparent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/non_internet_image"
+
+            android:src="@drawable/ic_baseline_wifi_off_24"
+
+            app:tint="@color/grey_transparent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="@string/check_your_connection_and_scroll" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/filter_tv"
         android:layout_width="wrap_content"
@@ -57,7 +76,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filter_cg">
 
-        <!-- Adding 7 rows of placeholders -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

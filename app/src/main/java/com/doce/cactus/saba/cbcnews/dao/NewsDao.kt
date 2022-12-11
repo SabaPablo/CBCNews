@@ -12,7 +12,7 @@ interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg news: News)
 
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM news ORDER BY publishedAt DESC")
     suspend fun getAll(): List<News>
 
     @Query("DELETE FROM news")

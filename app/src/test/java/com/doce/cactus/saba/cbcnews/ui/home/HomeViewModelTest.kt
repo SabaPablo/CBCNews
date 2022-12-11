@@ -3,8 +3,6 @@ package com.doce.cactus.saba.cbcnews.ui.home
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.doce.cactus.saba.cbcnews.getOrAwaitValue
-import com.doce.cactus.saba.cbcnews.models.Images
-import com.doce.cactus.saba.cbcnews.models.News
 import com.doce.cactus.saba.cbcnews.repositories.NewsRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flowOf
@@ -70,10 +68,10 @@ class HomeViewModelTest{
         runBlocking {
             launch(Dispatchers.IO) {
                 val viewModel= HomeViewModel(newsRepositoryMock)
-                viewModel.getOfflineNews()
+                viewModel.getCacheNews()
                 val value = viewModel.newsLiveData.getOrAwaitValue()
                 assertThat(value.size, Matchers.`is`(10))
-                assertThat(value[0].id, Matchers.`is`(3863948))
+                assertThat(value[0].id, Matchers.`is`(1414200))
 
             }
         }
@@ -101,7 +99,7 @@ class HomeViewModelTest{
     }
 
     @Test
-    fun `gets news, set a filter(story) and get 6 news filtered`(){
+    fun `gets news, set a filter(listOf(story)) and get 6 news filtered`(){
 
         val newsRepositoryMock = mock<NewsRepository>{
             on{ news() } doReturn flowOf(newsListData())
