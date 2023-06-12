@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CBCNews</string>
+    <string name="app_name">FEQ</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="next">Next</string>
@@ -10,7 +10,7 @@
 
     <!-- Image descriptions -->
     <string name="non_internet_image">No internet connection Image</string>
-    <string name="logo_cbc">Logo cbc</string>
+    <string name="logo_feq">Logo feq</string>
 
     <!-- Strings used for message -->
     <string name="check_your_connection_and_scroll">Check your internet connection and \n try again by scrolling down.</string>

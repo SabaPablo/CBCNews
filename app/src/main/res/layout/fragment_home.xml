@@ -6,103 +6,45 @@
     xmlns:shimmer="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".ui.home.HomeFragment">
-    <LinearLayout
-        android:id="@+id/no_data_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:contentDescription="@string/non_internet_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/non_internet_image"
-
-            android:src="@drawable/ic_baseline_wifi_off_24"
-
-            app:tint="@color/grey_transparent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:text="@string/check_your_connection_and_scroll" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/filter_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/filters"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/filter_cg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/filter_cg" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/filter_cg"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="clip_horizontal"
-        android:orientation="horizontal"
-        app:flexWrap="wrap"
-        app:justifyContent="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/filter_tv"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </com.google.android.material.chip.ChipGroup>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_view_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
-        shimmer:duration="800"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_cg">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <include layout="@layout/news_item_shimmer" />
-            <include layout="@layout/news_item_shimmer" />
-            <include layout="@layout/news_item_shimmer" />
-            <include layout="@layout/news_item_shimmer" />
-            <include layout="@layout/news_item_shimmer" />
-            <include layout="@layout/news_item_shimmer" />
-            <include layout="@layout/news_item_shimmer" />
-        </LinearLayout>
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_rl"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_cg">
-
-        <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/news_rv"
+    <ImageView
+        android:id="@+id/animated_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-             tools:layout_editor_absoluteX="16dp" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:scaleType="fitCenter"
+        android:alpha="0.4"
+        android:background="@drawable/backgraound_variable" />
+    <ImageView
+        android:id="@+id/logo_iv"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/logo_feq"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/animated_background"
+        app:layout_constraintTop_toBottomOf="@+id/logo_iv">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/day_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shows_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/day_rv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
